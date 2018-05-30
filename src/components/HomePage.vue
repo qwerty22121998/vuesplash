@@ -1,18 +1,47 @@
 <template>
-  <div>
-    <div v-if="imgs && imgs.length" type="none">
-      <div v-for="img of imgs" :key="img.user" style="width: 30%; display: inline-block">
-        <blockquote><p><a :href="img.user.portfolio_url"><strong><kbd>{{img.user.username}}</kbd></strong></a></p>
-          <img v-on:click="modalShow(img.id)" class="img-responsive" :src='img.urls.small' :title='img.created_at'/>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div v-if="imgs && imgs.length" class="col-3" type="none" style="display: inline-block">
+        <div v-for="(img, index) of imgs" v-if="index % 3 === 0" :key="img.user" class="row">
+          {{index}}
+          <blockquote><p><a :href="img.user.portfolio_url"><strong><kbd>{{img.user.username}}</kbd></strong></a></p>
+            <img v-on:click="modalShow(img.id)" class="img-responsive" :src='img.urls.small' :title='img.created_at'/>
 
-        </blockquote>
-        <modal adaptive="true" height="auto" :name="img.id">
-          <img class="img-responsive" v-on:click="modalHide(img.id)" :src="img.urls.regular"/>
-        </modal>
+          </blockquote>
+          <modal :adaptive=true height="auto" :name="img.id">
+            <img class="img-responsive" v-on:click="modalHide(img.id)" :src="img.urls.regular"/>
+          </modal>
+        </div>
       </div>
+      <div v-if="imgs && imgs.length" class="col-3" type="none" style="display: inline-block">
+        <div v-for="(img, index) of imgs" v-if="index % 3 === 1" :key="img.user" class="row">
+          {{index}}
+          <blockquote><p><a :href="img.user.portfolio_url"><strong><kbd>{{img.user.username}}</kbd></strong></a></p>
+            <img v-on:click="modalShow(img.id)" class="img-responsive" :src='img.urls.small' :title='img.created_at'/>
+
+          </blockquote>
+          <modal :adaptive=true height="auto" :name="img.id">
+            <img class="img-responsive" v-on:click="modalHide(img.id)" :src="img.urls.regular"/>
+          </modal>
+        </div>
+      </div>
+      <div v-if="imgs && imgs.length" class="col-3" type="none" style="display: inline-block">
+        <div v-for="(img, index) of imgs" v-if="index % 3 === 2" :key="img.user" class="row">
+          {{index}}
+          <blockquote><p><a :href="img.user.portfolio_url"><strong><kbd>{{img.user.username}}</kbd></strong></a></p>
+            <img v-on:click="modalShow(img.id)" class="img-responsive" :src='img.urls.small' :title='img.created_at'/>
+
+          </blockquote>
+          <modal :adaptive=true height="auto" :name="img.id">
+            <img class="img-responsive" v-on:click="modalHide(img.id)" :src="img.urls.regular"/>
+          </modal>
+        </div>
+      </div>
+
     </div>
     <inf-loading @infinite="infHandler"></inf-loading>
   </div>
+
 </template>
 
 <script>
@@ -23,7 +52,7 @@ export default {
   name: 'ImageList',
   data: () => ({
     page: 1,
-    perPage: 10,
+    perPage: 12,
     imgs: [],
     errors: []
   }),
@@ -38,7 +67,7 @@ export default {
         headers
       }
       )
-      instance.get(url + '?page=' + this.page + '&perPage=' + this.perPage)
+      instance.get(url + '?page=' + this.page + '&per_page=' + this.perPage)
         .then(response => {
           console.log(response.data)
           this.imgs = this.imgs.concat(response.data)
@@ -78,5 +107,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  .flex-container {
+    display: flex;
+  }
 
 </style>

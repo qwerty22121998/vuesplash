@@ -1,6 +1,6 @@
 <template>
-  <div id="app" class="container">
-    <img src="./assets/logo.jpg">
+  <div id="app" >
+    <img src="./assets/UnsplashLogo.png">
     <router-view/>
   </div>
 </template>
