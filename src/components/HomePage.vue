@@ -6,7 +6,7 @@
           <img v-on:click="modalShow(img.id)" class="img-responsive" :src='img.urls.small' :title='img.created_at'/>
 
         </blockquote>
-        <modal :name="img.id">
+        <modal adaptive="true" height="auto" :name="img.id">
           <img class="img-responsive" v-on:click="modalHide(img.id)" :src="img.urls.regular"/>
         </modal>
       </div>
