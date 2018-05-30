@@ -1,9 +1,14 @@
 <template>
   <div>
     <div v-if="imgs && imgs.length" type="none">
-      <div v-for="img of imgs" :key="img.user" style="width: 40%; display: inline-block">
-        <p><a :href="img.user.portfolio_url"><strong>{{img.user.username}}</strong></a></p>
-        <img :src='img.urls.small'/>
+      <div v-for="img of imgs" :key="img.user" style="width: 30%; display: inline-block">
+        <blockquote><p><a :href="img.user.portfolio_url"><strong><kbd>{{img.user.username}}</kbd></strong></a></p>
+          <img v-on:click="modalShow(img.id)" class="img-responsive" :src='img.urls.small' :title='img.created_at'/>
+
+        </blockquote>
+        <modal :name="img.id">
+          <img class="img-responsive" v-on:click="modalHide(img.id)" :src="img.urls.regular"/>
+        </modal>
       </div>
     </div>
     <inf-loading @infinite="infHandler"></inf-loading>
@@ -52,6 +57,12 @@ export default {
         this.next()
         $state.loaded()
       }, 1000)
+    },
+    modalShow (name) {
+      this.$modal.show(name)
+    },
+    modalHide (name) {
+      this.$modal.hide(name)
     }
   },
   mounted: function () {
