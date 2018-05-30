@@ -1,17 +1,18 @@
 <template>
   <div>
-    <ul v-if="imgs && imgs.length">
-      <li v-for="img of imgs" :key="img.user">
-        <p><strong>{{img.user.username}}</strong></p>
+    <div v-if="imgs && imgs.length" type="none">
+      <div v-for="img of imgs" :key="img.user" style="width: 40%; display: inline-block">
+        <p><a :href="img.user.portfolio_url"><strong>{{img.user.username}}</strong></a></p>
         <img :src='img.urls.small'/>
-      </li>
-    </ul>
-    <button v-on:click="next">Next Page</button>
+      </div>
+    </div>
+    <inf-loading @infinite="infHandler"></inf-loading>
   </div>
 </template>
 
 <script>
 import Axious from 'axios'
+import InfLoading from 'vue-infinite-loading'
 
 export default {
   name: 'ImageList',
@@ -35,18 +36,29 @@ export default {
       instance.get(url + '?page=' + this.page + '&perPage=' + this.perPage)
         .then(response => {
           console.log(response.data)
-          this.imgs = response.data
+          this.imgs = this.imgs.concat(response.data)
         }).catch(error => {
           this.errors.push(error)
         })
     },
+
     next: function () {
       this.page++
       this.loadImgs()
+      // scroll(0, 0)
+    },
+    infHandler ($state) {
+      setTimeout(() => {
+        this.next()
+        $state.loaded()
+      }, 1000)
     }
   },
   mounted: function () {
     this.loadImgs()
+  },
+  components: {
+    InfLoading
   }
 
 }
@@ -55,4 +67,5 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
 </style>
