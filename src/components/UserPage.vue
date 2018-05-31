@@ -36,7 +36,8 @@ export default {
   props: ['username'],
   methods: {
     loadImgs: function () {
-      let data = imgLoader.loadLastest(this.page, this.perPage)
+      let data = imgLoader.loadUserLastest(this.page, this.perPage, this.$route.params.username)
+
       data.then(response => {
         console.log(response.data)
         for (let i = 0; i < response.data.length; i++) {
