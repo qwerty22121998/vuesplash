@@ -5,7 +5,7 @@
            style="display: inline-block">
         <div v-for="(imgArr, index) of imgColumn" :key="index" class="row">
           <blockquote>
-            <p><a :href="imgArr.user.portfolio_url"><h2><kbd>{{imgArr.user.username}}</kbd></h2></a></p>
+            <p><router-link :to="'/'+imgArr.user.username"><h2><kbd>{{imgArr.user.username}}</kbd></h2></router-link></p>
             <img v-on:click="modalShow(imgArr.id)" class="img-responsive" :src='imgArr.urls.small'
                  :title='imgArr.created_at'/>
           </blockquote>
