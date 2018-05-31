@@ -7,7 +7,7 @@
           <blockquote>
             <p><router-link :to="'/'+imgArr.user.username"><h2><kbd>{{imgArr.user.username}}</kbd></h2></router-link></p>
             <img v-on:click="modalShow(imgArr.id)" class="img-responsive" :src='imgArr.urls.small'
-                 :title='imgArr.created_at'/>
+                 :title='imgArr.description'/>
           </blockquote>
           <modal :adaptive=true height="auto" :name="imgArr.id">
             <img class="img-responsive" :src="imgArr.urls.regular"/>
@@ -36,12 +36,24 @@ export default {
   props: ['username'],
   methods: {
     loadImgs: function () {
-      let data = imgLoader.loadLastest(this.page, this.perPage)
+      let searchQuery = this.$route.query.search
+      if (searchQuery === '') searchQuery = null
+      console.log(searchQuery)
+
+      let data = (searchQuery == null) ? imgLoader.loadLastest(this.page, this.perPage) : imgLoader.loadSearch(this.page, this.perPage, searchQuery)
       data.then(response => {
-        console.log(response.data)
-        for (let i = 0; i < response.data.length; i++) {
-          console.log('ADD')
-          this.imgs[i % this.colNumber].push(response.data[i])
+        if (searchQuery == null) {
+          console.log(response.data)
+          for (let i = 0; i < response.data.length; i++) {
+            console.log('ADD')
+            this.imgs[i % this.colNumber].push(response.data[i])
+          }
+        } else {
+          console.log(response.data.results)
+          for (let i = 0; i < response.data.results.length; i++) {
+            console.log('ADD')
+            this.imgs[i % this.colNumber].push(response.data.results[i])
+          }
         }
       }).catch(error => {
         this.errors.push(error.message)
@@ -81,5 +93,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+  kbd {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
 </style>

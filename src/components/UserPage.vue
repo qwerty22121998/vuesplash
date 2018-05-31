@@ -5,22 +5,33 @@
         <div class="col-4">
           <img :src="profile.profile_image.large"/>
         </div>
-        <div align="left" class="col-8" style="border-style: solid;border-width: 1px;">
-          <p class="username">{{profile.username}}</p>
+        <div align="left" class="col">
+          <div class="row">
+            <p class="username">{{profile.first_name}} {{profile.last_name}}</p>
+          </div>
           <div class="row status-bar">
-            <div class="col">
-              <b>{{profile.total_photos}}</b> Photos
+            <div class="col-2">
+              <strong class="btn-success">{{profile.total_photos}}</strong> Photos
             </div>
-            <div class="col">
-              <b>{{profile.total_likes}}</b> Likes
+            <div class="col-2">
+              <strong class="btn-primary">{{profile.total_likes}}</strong>  Likes
             </div>
-            <div class="col">
-              <b>{{profile.total_collections}}</b> Collections
+            <div class="col-3">
+              <strong class="btn-warning">{{profile.total_collections}}</strong> Collections
+            </div>
+          </div>
+          <div>
+            <div class="full-name row">
+              <p><strong>{{profile.username}}</strong></p>
+            </div>
+            <div class="row bio">
+              <p>{{profile.bio}}</p>
             </div>
           </div>
 
         </div>
       </div>
+      <hr>
     </div>
     <div v-if="imgs.length > 0" class="row justify-content-center">
       <div v-for="(imgColumn, index) in imgs" :key="index" :class="'col-' + (12/colNumber)"
@@ -113,7 +124,22 @@ export default {
     font-weight: 200;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   }
+
   .status-bar {
     font-size: 14px;
+  }
+  .full-name {
+    font-size: 16px;
+    color: #262626;
+    padding-top: 10px;
+    font-weight: 600;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  .bio {
+    font-size: 16px;
+    color: #262626;
+    padding-top: 10px;
+    font-weight: 300;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   }
 </style>
