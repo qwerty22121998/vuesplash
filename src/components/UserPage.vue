@@ -1,23 +1,27 @@
 <template>
   <div>
-    <div align="center" style="padding-bottom: 40px">
-      <div class="row">
-        <div class="col-4">
+    <div v-if="errors.length > 0" align="center">
+      <h1>Profile not found!</h1>
+    </div>
+
+    <div  v-if="errors.length === 0"  align="center" style="padding-bottom: 40px">
+      <blockquote class="row">
+        <div class="col-xs-3">
           <img :src="profile.profile_image.large"/>
         </div>
-        <div align="left" class="col">
+        <div align="left" class="col-xs-9">
           <div class="row">
             <p class="username">{{profile.first_name}} {{profile.last_name}}</p>
           </div>
           <div class="row status-bar">
-            <div class="col-2">
-              <strong class="btn-success">{{profile.total_photos}}</strong> Photos
+            <div class="col-xs-2">
+              <strong class="btn-success"> {{profile.total_photos}} </strong> Photos
             </div>
-            <div class="col-2">
-              <strong class="btn-primary">{{profile.total_likes}}</strong>  Likes
+            <div class="col-xs-2">
+              <strong class="btn-primary"> {{profile.total_likes}} </strong>  Likes
             </div>
-            <div class="col-3">
-              <strong class="btn-warning">{{profile.total_collections}}</strong> Collections
+            <div class="col-xs-3">
+              <strong class="btn-warning"> {{profile.total_collections}} </strong> Collections
             </div>
           </div>
           <div>
@@ -30,58 +34,56 @@
           </div>
 
         </div>
-      </div>
+      </blockquote>
       <hr>
-    </div>
-    <div v-if="imgs.length > 0" class="row justify-content-center">
-      <div v-for="(imgColumn, index) in imgs" :key="index" :class="'col-' + (12/colNumber)"
-           style="display: inline-block">
-        <div v-for="(imgArr, index) of imgColumn" :key="index" class="row">
-          <blockquote>
-            <!--<p><a :href="imgArr.user.portfolio_url"><h2><kbd>{{imgArr.user.username}}</kbd></h2></a></p>-->
-            <img v-on:click="modalShow(imgArr.id)" class="img-responsive" :src='imgArr.urls.small'
-                 :title='imgArr.created_at'/>
-          </blockquote>
-          <modal :adaptive=true height="auto" :name="imgArr.id">
-            <img class="img-responsive" :src="imgArr.urls.regular"/>
-          </modal>
+      <div v-if="imgs.length > 0" class="row justify-content-center">
+        <div v-for="(imgColumn, index) in imgs" :key="index" :class="'col-xs-' + (12/colNumber)"
+             style="display: inline-block">
+          <div v-for="(detail, index) of imgColumn" :key="index" class="row">
+            <ImageCard :detail="detail"></ImageCard>
+          </div>
         </div>
       </div>
+      <inf-loading v-if="!endLoad" @infinite="infHandler"></inf-loading>
     </div>
-    <!--<inf-loading @infinite="infHandler"></inf-loading>-->
+
   </div>
 
 </template>
 
 <script>
 import InfLoading from 'vue-infinite-loading'
+import ImageCard from '@/components/ImageCard.vue'
 
-let imgLoader = require('./getImageList.js')
+let API = require('./API.js')
 export default {
   name: 'ImageList',
+  components: {
+    InfLoading,
+    ImageCard
+  },
   data: () => ({
     username: '',
-    profile: null,
+    profile: Object,
     page: 1,
     perPage: 12,
     colNumber: 3,
     imgs: [],
-    errors: []
+    errors: [],
+    endLoad: false
   }),
-  props: ['username'],
   methods: {
     loadImgs: function () {
       this.username = this.$route.params.username
-      let data = imgLoader.loadUserLastest(this.page, this.perPage, this.username)
+      let data = API.loadUserLastest(this.page, this.perPage, this.username)
       data.then(response => {
         this.profile = response.data[0]['user']
-        console.log(response.data)
         for (let i = 0; i < response.data.length; i++) {
-          console.log('ADD')
           this.imgs[i % this.colNumber].push(response.data[i])
         }
       }).catch(error => {
-        this.errors.push(error.message)
+        if (this.page === 0) this.errors.push(error.message)
+        this.endLoad = true
       })
     },
     next: function () {
@@ -108,9 +110,6 @@ export default {
     for (let i = 0; i < this.colNumber; i++) {
       this.imgs.push([])
     }
-  },
-  components: {
-    InfLoading
   }
 }
 

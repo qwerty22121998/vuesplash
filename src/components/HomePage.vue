@@ -1,17 +1,10 @@
 <template>
   <div>
     <div v-if="imgs.length > 0" class="row justify-content-center">
-      <div v-for="(imgColumn, index) in imgs" :key="index" :class="'col-' + (12/colNumber)"
+      <div v-for="(imgColumn, index) in imgs" :key="index" :class="'col-xs-' + (12/colNumber)"
            style="display: inline-block">
-        <div v-for="(imgArr, index) of imgColumn" :key="index" class="row">
-          <blockquote>
-            <p><router-link :to="'/'+imgArr.user.username"><h2><kbd>{{imgArr.user.username}}</kbd></h2></router-link></p>
-            <img v-on:click="modalShow(imgArr.id)" class="img-responsive" :src='imgArr.urls.small'
-                 :title='imgArr.description'/>
-          </blockquote>
-          <modal :adaptive=true height="auto" :name="imgArr.id">
-            <img class="img-responsive" :src="imgArr.urls.regular"/>
-          </modal>
+        <div v-for="(detail, index) of imgColumn" :key="index" class="row">
+          <ImageCard :detail="detail"></ImageCard>
         </div>
       </div>
     </div>
@@ -22,10 +15,15 @@
 
 <script>
 import InfLoading from 'vue-infinite-loading'
+import ImageCard from '@/components/ImageCard.vue'
 
-let imgLoader = require('./getImageList.js')
+let API = require('./API.js')
 export default {
   name: 'ImageList',
+  components: {
+    ImageCard,
+    InfLoading
+  },
   data: () => ({
     page: 1,
     perPage: 12,
@@ -38,20 +36,15 @@ export default {
     loadImgs: function () {
       let searchQuery = this.$route.query.search
       if (searchQuery === '') searchQuery = null
-      console.log(searchQuery)
 
-      let data = (searchQuery == null) ? imgLoader.loadLastest(this.page, this.perPage) : imgLoader.loadSearch(this.page, this.perPage, searchQuery)
+      let data = (searchQuery == null) ? API.loadLastest(this.page, this.perPage) : API.loadSearch(this.page, this.perPage, searchQuery)
       data.then(response => {
         if (searchQuery == null) {
-          console.log(response.data)
           for (let i = 0; i < response.data.length; i++) {
-            console.log('ADD')
             this.imgs[i % this.colNumber].push(response.data[i])
           }
         } else {
-          console.log(response.data.results)
           for (let i = 0; i < response.data.results.length; i++) {
-            console.log('ADD')
             this.imgs[i % this.colNumber].push(response.data.results[i])
           }
         }
@@ -83,9 +76,6 @@ export default {
     for (let i = 0; i < this.colNumber; i++) {
       this.imgs.push([])
     }
-  },
-  components: {
-    InfLoading
   }
 }
 
