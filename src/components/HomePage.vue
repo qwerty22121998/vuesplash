@@ -62,11 +62,11 @@ export default {
         $state.loaded()
       }, 1000)
     },
-    modalShow (name) {
-      this.$modal.show(name)
+    mmodalShow (name) {
+      this.$mmodal.show(name)
     },
-    modalHide (name) {
-      this.$modal.hide(name)
+    mmodalHide (name) {
+      this.$mmodal.hide(name)
     }
   },
   mounted: function () {

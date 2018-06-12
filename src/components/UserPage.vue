@@ -1,10 +1,9 @@
 <template>
   <div>
-    <div v-if="errors.length > 0" align="center">
+    <div v-if="Object.keys(profile).length === 0" align="center">
       <h1>Profile not found!</h1>
     </div>
-
-    <div  v-if="errors.length === 0"  align="center" style="padding-bottom: 40px">
+    <div v-if="Object.keys(profile).length !== 0"  align="center" style="padding-bottom: 40px">
       <blockquote class="row">
         <div class="col-xs-3">
           <img :src="profile.profile_image.large"/>
@@ -32,7 +31,6 @@
               <p>{{profile.bio}}</p>
             </div>
           </div>
-
         </div>
       </blockquote>
       <hr>
