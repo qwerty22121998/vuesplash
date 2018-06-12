@@ -4,7 +4,6 @@ import 'bootstrap/dist/css/bootstrap.css'
 import '@/components/modal.css'
 import HomePage from '@/components/HomePage'
 import UserPage from '@/components/UserPage'
-
 Vue.use(Router)
 
 export default new Router({

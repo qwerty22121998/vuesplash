@@ -50,8 +50,8 @@
 </template>
 
 <script>
-import InfLoading from 'vue-infinite-loading'
 import ImageCard from '@/components/ImageCard.vue'
+import InfLoading from 'vue-infinite-loading'
 
 let API = require('./API.js')
 export default {

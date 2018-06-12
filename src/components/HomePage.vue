@@ -14,8 +14,8 @@
 </template>
 
 <script>
-import InfLoading from 'vue-infinite-loading'
 import ImageCard from '@/components/ImageCard.vue'
+import InfLoading from 'vue-infinite-loading'
 
 let API = require('./API.js')
 export default {
@@ -61,12 +61,6 @@ export default {
         this.next()
         $state.loaded()
       }, 1000)
-    },
-    mmodalShow (name) {
-      this.$mmodal.show(name)
-    },
-    mmodalHide (name) {
-      this.$mmodal.hide(name)
     }
   },
   mounted: function () {
